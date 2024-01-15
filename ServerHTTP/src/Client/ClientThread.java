@@ -17,13 +17,20 @@ public class ClientThread extends Thread{
         return requestedPath;
     }
     public void setRequestedPath(String requestedPath) {
-        this.requestedPath = String.valueOf(new File("htdocs" +
-                (((new File("htdocs" + requestedPath)).isDirectory()) ?
-                        requestedPath + "/index.html" :
-                        (new File("htdocs" + "/Sito" + requestedPath).exists() ?
-                        "/Sito" + requestedPath :
-                        requestedPath))));
+        this.requestedPath = String.valueOf(
+            new File("htdocs" + (
+                ((new File("htdocs" + requestedPath)).isDirectory()) ?
+
+                    ((new File("htdocs" + requestedPath)).getName().equals((new File("htdocs" + "/Sito" + requestedPath)).getName())) ?
+                    requestedPath + "/index.html" :
+                    requestedPath + "/Sito/index.html"
+
+               :(new File("htdocs" + "/Sito" + requestedPath).exists() ?
+                    "/Sito" + requestedPath :
+                    requestedPath)
+                )));
     }
+    //requestedPath + "/Sito/index.html"
     public ClientThread (Socket s){
         this.s = s;
     }
@@ -70,6 +77,7 @@ public class ClientThread extends Thread{
                 case "css" -> "text/css";
                 case "txt" -> "text/plain";
                 case "gif" -> "image/gif";
+                case "json" -> "application/json";
                 default -> "";
             };
         } catch (ArrayIndexOutOfBoundsException e) {
